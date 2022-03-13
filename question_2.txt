@@ -1,0 +1,106 @@
+class Ball_Brick:
+
+    def __init__(self,border_arr,matrix_size):
+        self.matrix_size = matrix_size
+        self.line_array = []
+        self.border_arr = border_arr
+
+        for i in range(matrix_size):
+            self.line_array = []
+
+            for j in range(matrix_size):
+
+                if i == 0 or j == 0 or i == matrix_size-1 or j == matrix_size-1:
+                    self.line_array.append('W')
+
+                else:
+                    self.line_array.append(' ')
+
+            self.border_arr.append(self.line_array)
+        
+        self.mid = matrix_size//2
+        
+        for i in range(matrix_size):
+
+            if i > 0 and i <matrix_size-1:
+
+                if i == self.mid:
+                    self.border_arr[matrix_size-1][i] = 'o'
+
+                else:
+                    self.border_arr[matrix_size-1][i] = 'G'
+
+    def insert_data_into_array(self,data_array):
+
+        for i in data_array:
+            self.border_arr[i[0]][i[1]] = i[2]
+        
+    def display_output(self,matrix_size):
+
+        for i in range(matrix_size):
+            for j in range(matrix_size):
+                print(self.border_arr[i][j],end="")
+
+            print()
+    
+    def travers_the_ball(self,direction,matrix_size):
+
+        if direction in ['lt','Lt','LT','lT']:
+
+            if self.mid >= 2 and self.mid <= matrix_size-2:
+                
+                self.border_arr[matrix_size-1][self.mid-1],self.border_arr[matrix_size-1][self.mid] = 'o','G'
+                self.mid = self.mid - 1
+                self.destroy_the_cells()
+
+            else:
+                return
+
+        elif direction in ['RT','rt','Rt','rT']:
+
+            if self.mid >= 2 and self.mid <= matrix_size-2:
+
+                self.border_arr[matrix_size-1][self.mid+1],self.border_arr[matrix_size-1][self.mid] = 'o','G'
+                self.mid = self.mid + 1
+                self.destroy_the_cells()
+
+            else:
+                return
+        
+        else:
+            self.destroy_the_cells()
+            
+    def destroy_the_cells(self):
+        for i in range(self.matrix_size-2,-1,-1):
+            if self.border_arr[i][self.mid] == ' ':
+                continue
+            else:
+                self.border_arr[i][self.mid] -= 1
+                if self.border_arr[i][self.mid] == 0:
+                    self.border_arr[i][self.mid] = ' '
+                return
+
+
+matrix_size = int(input("Enter size of the NxN matrix:"))
+data_array = []
+
+while True:
+    print("Enter the brick's position and the brick type:")
+    data = list(map(int,input().split()))
+    data_array.append(data)
+    termination = input("Do you want to continue(Y or N)")
+
+    if termination == 'n' or termination == 'N':
+        break
+
+Ball_Count = int(input("Enter ball count:"))
+result_array = []
+obj = Ball_Brick(result_array,matrix_size)
+obj.insert_data_into_array(data_array)
+obj.display_output(matrix_size)
+print("Ball Count is ",Ball_Count)
+
+while True:
+    direction = input("Enter the direction in which the ball need to traverse:")
+    obj.travers_the_ball(direction,matrix_size)
+    obj.display_output(matrix_size)
