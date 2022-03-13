@@ -1,0 +1,59 @@
+class Ball_Brick:
+
+    def __init__(self,border_arr,matrix_size):
+        self.line_arr = []
+        self.border_arr = border_arr
+
+        for i in range(matrix_size):
+            self.line_arr = []
+
+            for j in range(matrix_size):
+
+                if i == 0 or j == 0 or i == matrix_size-1 or j == matrix_size-1:
+                    self.line_arr.append('W')
+
+                else:
+                    self.line_arr.append(' ')
+
+            self.border_arr.append(self.line_arr)
+        
+        self.mid = matrix_size//2
+        
+        for i in range(matrix_size):
+
+            if i > 0 and i <matrix_size-1:
+
+                if i == self.mid:
+                    self.border_arr[matrix_size-1][i] = 'o'
+
+                else:
+                    self.border_arr[matrix_size-1][i] = 'G'
+
+    def insert_data_into_array(self,data_array):
+        for i in data_array:
+            self.border_arr[i[0]][i[1]] = i[2]
+        
+    def display_output(self,matrix_size):
+        for i in range(matrix_size):
+            for j in range(matrix_size):
+                print(self.border_arr[i][j],end="")
+            print()
+matrix_size = int(input())
+data_array = []
+
+while True:
+    print("Enter brick's position and brick type:")
+    data = list(map(int,input().split()))
+    data_array.append(data)
+    print("Do you want to continue(Y or N)")
+    termination = input()
+
+    if termination == 'n' or termination == 'N':
+        break
+
+Ball_Count = int(input())
+result_array = []
+obj = Ball_Brick(result_array,matrix_size)
+obj.insert_data_into_array(data_array)
+obj.display_output(matrix_size)
+print("Ball Count is ",Ball_Count)
